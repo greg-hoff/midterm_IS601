@@ -26,6 +26,48 @@ def calculator_repl():
         calc.add_observer(LoggingObserver())
         calc.add_observer(AutoSaveObserver(calc))
 
+        # Command abbreviation mapping
+        command_aliases = {
+            # Arithmetic operations abbreviations
+            'a': 'add',
+            '+': 'add',
+            's': 'subtract',
+            'sub': 'subtract',
+            '-': 'subtract',
+            'm': 'multiply',
+            'mul': 'multiply',
+            '*': 'multiply',
+            'd': 'divide',
+            'div': 'divide',
+            '/': 'divide',
+            'p': 'power',
+            'pow': 'power',
+            '^': 'power',
+            '**': 'power',
+            'mod': 'modulus',
+            '%': 'modulus',
+            'id': 'integer_division',
+            'idiv': 'integer_division',
+            '//': 'integer_division',
+            'per': 'percentage',
+            'pct': 'percentage',
+            'ad': 'absolute_difference',
+            'abs': 'absolute_difference',
+            'absdiff': 'absolute_difference',
+            'r': 'root',
+            'rt': 'root',
+            # System commands abbreviations
+            'h': 'help',
+            '?': 'help',
+            'q': 'exit',
+            'quit': 'exit',
+            'x': 'exit',
+            'hist': 'history',
+            'c': 'clear',
+            'u': 'undo',
+            'z': 'redo',
+        }
+
         print("Calculator started. Type 'help' for commands.")
 
         while True:
@@ -33,17 +75,33 @@ def calculator_repl():
                 # Prompt the user for a command
                 command = input("\nEnter command: ").lower().strip()
 
+                # Resolve command aliases/abbreviations
+                original_command = command
+                command = command_aliases.get(command, command)
+
                 if command == 'help':
                     # Display available commands
                     print("\nAvailable commands:")
-                    print("  add, subtract, multiply, divide, power, modulus, integer_division, root - Perform calculations")
-                    print("  history - Show calculation history")
-                    print("  clear - Clear calculation history")
-                    print("  undo - Undo the last calculation")
-                    print("  redo - Redo the last undone calculation")
-                    print("  save - Save calculation history to file")
-                    print("  load - Load calculation history from file")
-                    print("  exit - Exit the calculator")
+                    print("  Arithmetic Operations:")
+                    print("    add (a, +) - Addition")
+                    print("    subtract (s, sub, -) - Subtraction")
+                    print("    multiply (m, mul, *) - Multiplication")
+                    print("    divide (d, div, /) - Division")
+                    print("    power (p, pow, ^, **) - Exponentiation")
+                    print("    modulus (mod, %) - Remainder after division")
+                    print("    integer_division (id, idiv, //) - Integer division")
+                    print("    percentage (per, pct) - Calculate percentage")
+                    print("    absolute_difference (ad, abs, absdiff) - Absolute difference")
+                    print("    root (r, rt) - Calculate nth root")
+                    print("  System Commands:")
+                    print("    help (h, ?) - Show this help")
+                    print("    history (hist) - Show calculation history")
+                    print("    clear (c) - Clear calculation history")
+                    print("    undo (u) - Undo the last calculation")
+                    print("    redo (z) - Redo the last undone calculation")
+                    print("    save - Save calculation history to file")
+                    print("    load - Load calculation history from file")
+                    print("    exit (q, quit, x) - Exit the calculator")
                     continue
 
                 if command == 'exit':
@@ -107,7 +165,7 @@ def calculator_repl():
                         print(f"Error loading history: {e}")
                     continue
 
-                if command in ['add', 'subtract', 'multiply', 'divide', 'power', 'modulus', 'root']:
+                if command in ['add', 'subtract', 'multiply', 'divide', 'power', 'modulus', 'integer_division', 'percentage', 'absolute_difference', 'root']:
                     # Perform the specified arithmetic operation
                     try:
                         print("\nEnter numbers (or 'cancel' to abort):")
