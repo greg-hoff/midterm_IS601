@@ -185,11 +185,19 @@ def calculator_repl():
                         # Perform the calculation
                         result = calc.perform_operation(a, b)
 
-                        # Normalize the result if it's a Decimal
+                        # Format the result with configured precision
                         if isinstance(result, Decimal):
-                            result = result.normalize()
+                            try:
+                                # Format result to configured precision
+                                precision_pattern = Decimal('0.' + '0' * calc.config.precision)
+                                formatted_result = str(result.quantize(precision_pattern).normalize())
+                            except:
+                                # Fallback if quantize fails
+                                formatted_result = str(result)
+                        else:
+                            formatted_result = str(result)
 
-                        print(f"\nResult: {result}")
+                        print(f"\nResult: {formatted_result}")
                     except (ValidationError, OperationError) as e:
                         # Handle known exceptions related to validation or operation errors
                         print(f"Error: {e}")
