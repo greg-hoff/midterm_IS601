@@ -476,3 +476,39 @@ def test_calculator_repl_fatal_startup_print_error(mock_print, mock_logging_erro
     # Verify that the fatal error was reported and logged
     mock_print.assert_any_call("Fatal error: Print system failure")
     mock_logging_error.assert_called_once_with("Fatal error in calculator REPL: Print system failure")
+
+
+# Tests for missing coverage lines - Added by Greg Hoffer
+
+@patch('builtins.input', side_effect=['exit'])
+@patch('builtins.print')
+def test_calculator_repl_exit_save_history_failure(mock_print, mock_input):
+    """Test exit command when save_history fails (lines 54-55)."""
+    with patch('app.calculator.Calculator.save_history') as mock_save_history:
+        mock_save_history.side_effect = Exception("Save failed")
+        calculator_repl()
+        mock_save_history.assert_called_once()
+        mock_print.assert_any_call("Warning: Could not save history: Save failed")
+        mock_print.assert_any_call("Goodbye!")
+
+# Note: Lines 98-99 (save command failure) are complex to test due to 
+# the way save_history is called in multiple places. The error handling
+# code exists but would require more complex mocking to test properly.
+
+@patch('builtins.input', side_effect=['add', 'cancel', 'exit'])
+@patch('builtins.print')
+def test_calculator_repl_cancel_first_number(mock_print, mock_input):
+    """Test cancelling operation at first number input (lines 116-117)."""
+    calculator_repl()
+    mock_print.assert_any_call("\nEnter numbers (or 'cancel' to abort):")
+    mock_print.assert_any_call("Operation cancelled")
+    mock_print.assert_any_call("Goodbye!")
+
+@patch('builtins.input', side_effect=['add', '5', 'cancel', 'exit'])
+@patch('builtins.print')
+def test_calculator_repl_cancel_second_number(mock_print, mock_input):
+    """Test cancelling operation at second number input (lines 120-121)."""
+    calculator_repl()
+    mock_print.assert_any_call("\nEnter numbers (or 'cancel' to abort):")
+    mock_print.assert_any_call("Operation cancelled")
+    mock_print.assert_any_call("Goodbye!")
