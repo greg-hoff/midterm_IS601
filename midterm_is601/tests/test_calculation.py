@@ -58,6 +58,14 @@ def test_modulus_by_zero():
     with pytest.raises(OperationError, match="Division by zero is not allowed"):
         Calculation(operation="Modulus", operand1=Decimal("10"), operand2=Decimal("0"))    
 
+def test_integer_division():
+    calc = Calculation(operation="IntegerDivision", operand1=Decimal("10"), operand2=Decimal("3"))
+    assert calc.result == Decimal("3")
+
+def test_integer_division_by_zero():
+    with pytest.raises(OperationError, match="Division by zero is not allowed"):
+        Calculation(operation="IntegerDivision", operand1=Decimal("10"), operand2=Decimal("0"))
+
 def test_unknown_operation():
     with pytest.raises(OperationError, match="Unknown operation"):
         Calculation(operation="Unknown", operand1=Decimal("5"), operand2=Decimal("3"))
