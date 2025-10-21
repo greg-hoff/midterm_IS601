@@ -342,7 +342,7 @@ class Calculator:
             List[str]: List of formatted calculation history entries.
         """
         return [
-            f"{calc.operation}({calc.operand1}, {calc.operand2}) = {calc.result}"
+            f"{calc.operation}({calc.operand1}, {calc.operand2}) = {calc.format_result(self.config.precision)}"
             for calc in self.history
         ]
 
