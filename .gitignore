@@ -1,0 +1,40 @@
+# Ignore module directories
+module-1/
+module1/
+module3_is601/
+is601/
+samplerepo/
+data_mining_midterm/
+venv/
+
+# Ignore all project directories except assignment5
+projects/assignment2/
+projects/assignment3/
+projects/assignment3_is601/
+projects/assignment4/
+projects/module2_is601/
+projects/module4_is601/
+projects/new/
+
+# Ignore system and config files
+.bash_history
+.bash_logout
+.bashrc
+.wsl-config
+.wget-hsts
+.sudo_as_admin_successful
+.viminfo
+.vscode-server/
+.cache/
+.dotnet/
+.gitconfig
+.landscape/
+.lesshst
+.motd_shown
+.profile
+.ssh/
+
+# Ignore this gitignore file itself (if desired)
+# .gitignore
+
+projects/
