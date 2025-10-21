@@ -14,6 +14,7 @@ implemented colorama to display invalid input and error messages in RED
 I think I created one too many folders so that the app is nested in one extra folder level in github.
     *not sure how to fix
 
+recorded demo of calculator functions
 
 HELP MENU PREVIEW
 

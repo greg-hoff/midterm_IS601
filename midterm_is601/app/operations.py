@@ -276,6 +276,7 @@ class IntegerDivision(Operation):
         self.validate_operands(a, b)
         return a // b
 
+# Added by Greg Hoffer
 class Percentage(Operation):
     """
     Percentage operation implementation.
@@ -314,6 +315,7 @@ class Percentage(Operation):
         self.validate_operands(a, b)
         return (a / b) * 100
 
+# Added by Greg Hoffer
 class AbsoluteDifference(Operation):
     """
     Absolute Difference operation implementation.
