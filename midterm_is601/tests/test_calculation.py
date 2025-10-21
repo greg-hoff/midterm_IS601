@@ -66,6 +66,10 @@ def test_integer_division_by_zero():
     with pytest.raises(OperationError, match="Division by zero is not allowed"):
         Calculation(operation="IntegerDivision", operand1=Decimal("10"), operand2=Decimal("0"))
 
+def test_percentage():
+    calc = Calculation(operation="Percentage", operand1=Decimal("50"), operand2=Decimal("200"))
+    assert calc.result == Decimal("25")
+
 def test_unknown_operation():
     with pytest.raises(OperationError, match="Unknown operation"):
         Calculation(operation="Unknown", operand1=Decimal("5"), operand2=Decimal("3"))
