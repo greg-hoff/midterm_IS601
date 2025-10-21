@@ -84,3 +84,7 @@ dmypy.json
 
 # Local development configuration
 local_settings.py
+
+# Module content files (auto-generated or reference only)
+module_contents.md
+unit_content.md
