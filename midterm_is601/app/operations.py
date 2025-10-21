@@ -276,6 +276,43 @@ class IntegerDivision(Operation):
         self.validate_operands(a, b)
         return a // b
 
+class Percentage(Operation):
+    """
+    Percentage operation implementation.
+
+    Calculates the percentage of one number relative to another.
+    """
+
+    def validate_operands(self, a: Decimal, b: Decimal) -> None:
+        """
+        Validate operands for percentage operation.
+
+        Overrides the base class method to ensure that the total is not zero.
+
+        Args:
+            a (Decimal): Part value.
+            b (Decimal): Total value.
+
+        Raises:
+            ValidationError: If the total value is zero.
+        """
+        super().validate_operands(a, b)
+        if b == 0:
+            raise ValidationError("Total value cannot be zero")
+
+    def execute(self, a: Decimal, b: Decimal) -> Decimal:
+        """
+        Calculate the percentage of one number relative to another.
+
+        Args:
+            a (Decimal): Part value.
+            b (Decimal): Total value.
+
+        Returns:
+            Decimal: The percentage value.
+        """
+        self.validate_operands(a, b)
+        return (a / b) * 100
 
 class Root(Operation):
     """
@@ -337,6 +374,7 @@ class OperationFactory:
         'power': Power,
         'modulus': Modulus,
         'integer_division': IntegerDivision,
+        'percentage': Percentage,
         'root': Root
     }
 

@@ -7,6 +7,7 @@ from app.operations import (
     IntegerDivision,
     Operation,
     Addition,
+    Percentage,
     Subtraction,
     Multiplication,
     Division,
@@ -224,6 +225,25 @@ class TestIntegerDivision(BaseOperationTest):
         },
     }
 
+class TestPercentage(BaseOperationTest):
+    """Test Percentage operation."""
+
+    operation_class = Percentage
+    valid_test_cases = {
+        "basic_percentage": {"a": "10", "b": "100", "expected": "10"},  # 10/100 * 100 = 10%
+        "fifty_percentage": {"a": "50", "b": "100", "expected": "50"},  # 50/100 * 100 = 50%
+        "full_percentage": {"a": "200", "b": "100", "expected": "200"},  # 200/100 * 100 = 200%
+        "decimal_percentage": {"a": "25", "b": "80", "expected": "31.25"},  # 25/80 * 100 = 31.25%
+    }
+    invalid_test_cases = {
+        "zero_total": {
+            "a": "50",
+            "b": "0",
+            "error": ValidationError,
+            "message": "Total value cannot be zero"
+        },
+    }
+
 class TestOperationFactory:
     """Test OperationFactory functionality."""
 
@@ -237,6 +257,7 @@ class TestOperationFactory:
             'power': Power,
             'modulus': Modulus,
             'integer_division': IntegerDivision,
+            'percentage': Percentage,
             'root': Root,
         }
 
