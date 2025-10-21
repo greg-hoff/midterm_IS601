@@ -263,7 +263,7 @@ def test_calculator_repl_load_failure(mock_print, mock_input):
         mock_load_history.side_effect = [None, Exception("File not found")]
         calculator_repl()
         assert mock_load_history.call_count == 2
-        mock_print.assert_any_call("Error loading history: File not found")
+        mock_print.assert_any_call("\x1b[31mError loading history: File not found")
         mock_print.assert_any_call("Goodbye!")
 
 @patch('builtins.input', side_effect=['load', 'history', 'exit'])
@@ -352,7 +352,7 @@ def test_calculator_repl_keyboard_interrupt(mock_print, mock_input):
     calculator_repl()
     
     # Verify that the interruption was handled gracefully
-    mock_print.assert_any_call("\nOperation cancelled")
+    mock_print.assert_any_call("\n\x1b[31mOperation cancelled")
     mock_print.assert_any_call("Goodbye!")
 
 @patch('builtins.input')
@@ -365,7 +365,7 @@ def test_calculator_repl_keyboard_interrupt_during_operation(mock_print, mock_in
     calculator_repl()
     
     # Verify that the interruption was handled gracefully
-    mock_print.assert_any_call("\nOperation cancelled")
+    mock_print.assert_any_call("\n\x1b[31mOperation cancelled")
     mock_print.assert_any_call("Goodbye!")
 
 @patch('builtins.input')
@@ -378,7 +378,7 @@ def test_calculator_repl_eof_error(mock_print, mock_input):
     calculator_repl()
     
     # Verify that EOFError was handled gracefully
-    mock_print.assert_any_call("\nInput terminated. Exiting...")
+    mock_print.assert_any_call("\n\x1b[31mInput terminated. Exiting...")
 
 @patch('builtins.input')
 @patch('builtins.print')
@@ -395,7 +395,7 @@ def test_calculator_repl_multiple_interrupts(mock_print, mock_input):
     
     # Verify that both interruptions were handled by checking call count
     operation_cancelled_calls = [call for call in mock_print.call_args_list 
-                               if call.args and call.args[0] == "\nOperation cancelled"]
+                               if call.args and call.args[0] == "\n\x1b[31mOperation cancelled"]
     assert len(operation_cancelled_calls) >= 2
     mock_print.assert_any_call("Goodbye!")
 
@@ -409,7 +409,7 @@ def test_calculator_repl_interrupt_during_number_input(mock_print, mock_input):
     calculator_repl()
     
     # Verify graceful handling
-    mock_print.assert_any_call("\nOperation cancelled")
+    mock_print.assert_any_call("\n\x1b[31mOperation cancelled")
     mock_print.assert_any_call("Goodbye!")
 
 @patch('builtins.input')
@@ -422,7 +422,7 @@ def test_calculator_repl_general_exception_handling(mock_print, mock_input):
     calculator_repl()
     
     # Verify that the exception was caught and handled
-    mock_print.assert_any_call("Error: Unexpected error")
+    mock_print.assert_any_call("\x1b[31mError: Unexpected error")
     mock_print.assert_any_call("Goodbye!")
 
 # Test Fatal Error Handling
@@ -441,7 +441,7 @@ def test_calculator_repl_fatal_initialization_error(mock_print, mock_logging_err
         calculator_repl()
     
     # Verify that the fatal error was reported to user and logged
-    mock_print.assert_any_call("Fatal error: Fatal initialization error")
+    mock_print.assert_any_call("\x1b[31mFatal error: Fatal initialization error")
     mock_logging_error.assert_called_once_with("Fatal error in calculator REPL: Fatal initialization error")
 
 @patch('app.calculator_repl.Calculator')
@@ -459,7 +459,7 @@ def test_calculator_repl_fatal_observer_error(mock_print, mock_logging_error, mo
         calculator_repl()
     
     # Verify that the fatal error was reported and logged
-    mock_print.assert_any_call("Fatal error: Observer setup failed")
+    mock_print.assert_any_call("\x1b[31mFatal error: Observer setup failed")
     mock_logging_error.assert_called_once_with("Fatal error in calculator REPL: Observer setup failed")
 
 @patch('app.calculator_repl.logging.error')
@@ -474,7 +474,7 @@ def test_calculator_repl_fatal_startup_print_error(mock_print, mock_logging_erro
         calculator_repl()
     
     # Verify that the fatal error was reported and logged
-    mock_print.assert_any_call("Fatal error: Print system failure")
+    mock_print.assert_any_call("\x1b[31mFatal error: Print system failure")
     mock_logging_error.assert_called_once_with("Fatal error in calculator REPL: Print system failure")
 
 
@@ -488,7 +488,7 @@ def test_calculator_repl_exit_save_history_failure(mock_print, mock_input):
         mock_save_history.side_effect = Exception("Save failed")
         calculator_repl()
         mock_save_history.assert_called_once()
-        mock_print.assert_any_call("Warning: Could not save history: Save failed")
+        mock_print.assert_any_call("\x1b[31mWarning: Could not save history: Save failed")
         mock_print.assert_any_call("Goodbye!")
 
 # Note: Lines 98-99 (save command failure) are complex to test due to 
