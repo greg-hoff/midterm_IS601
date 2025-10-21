@@ -4,6 +4,7 @@ from typing import Any, Dict, Type
 
 from app.exceptions import ValidationError
 from app.operations import (
+    IntegerDivision,
     Operation,
     Addition,
     Subtraction,
@@ -203,6 +204,25 @@ class TestModulus(BaseOperationTest):
         },
     }
 
+class TestIntegerDivision(BaseOperationTest):
+    """Test Integer Division operation."""
+
+    operation_class = IntegerDivision
+    valid_test_cases = {
+        "positive_numbers": {"a": "10", "b": "3", "expected": "3"},
+        "negative_numbers": {"a": "-10", "b": "-3", "expected": "3"},
+        "mixed_signs": {"a": "-10", "b": "3", "expected": "-3"},
+        "decimal_dividend": {"a": "10.5", "b": "3", "expected": "3"},
+        "zero_dividend": {"a": "0", "b": "5", "expected": "0"},
+    }
+    invalid_test_cases = {
+        "division_by_zero": {
+            "a": "5",
+            "b": "0",
+            "error": ValidationError,
+            "message": "Division by zero is not allowed"
+        },
+    }
 
 class TestOperationFactory:
     """Test OperationFactory functionality."""
@@ -216,6 +236,7 @@ class TestOperationFactory:
             'divide': Division,
             'power': Power,
             'modulus': Modulus,
+            'integer_division': IntegerDivision,
             'root': Root,
         }
 
