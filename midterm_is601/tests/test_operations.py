@@ -4,6 +4,7 @@ from typing import Any, Dict, Type
 
 from app.exceptions import ValidationError
 from app.operations import (
+    AbsoluteDifference,
     IntegerDivision,
     Operation,
     Addition,
@@ -244,6 +245,18 @@ class TestPercentage(BaseOperationTest):
         },
     }
 
+class TestAbsoluteDifference(BaseOperationTest):
+    """Test Absolute Difference operation."""
+
+    operation_class = AbsoluteDifference
+    valid_test_cases = {
+        "positive_difference": {"a": "18", "b": "3", "expected": "15"},
+        "negative_difference": {"a": "3", "b": "10", "expected": "7"},
+        "zero_difference": {"a": "5", "b": "5", "expected": "0"},
+        "decimal_difference": {"a": "5.5", "b": "3.3", "expected": "2.2"},
+    }
+    invalid_test_cases = {}  # Absolute Difference has no invalid cases
+
 class TestOperationFactory:
     """Test OperationFactory functionality."""
 
@@ -258,6 +271,7 @@ class TestOperationFactory:
             'modulus': Modulus,
             'integer_division': IntegerDivision,
             'percentage': Percentage,
+            'absolute_difference': AbsoluteDifference,
             'root': Root,
         }
 
