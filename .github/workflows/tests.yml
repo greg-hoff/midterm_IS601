@@ -21,12 +21,14 @@ jobs:
         with:
           python-version: '3.x'  # Set your desired Python version
 
-      - name: Install dependencies from requirements.txt
+      - name: Change to project directory and install dependencies
         run: |
+          cd midterm_is601
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest pytest-cov  # Ensure pytest-cov is installed
 
       - name: Run tests with pytest and enforce 70% coverage
         run: |
+          cd midterm_is601
           pytest --cov=app --cov-fail-under=70
