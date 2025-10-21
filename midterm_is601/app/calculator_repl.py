@@ -36,7 +36,7 @@ def calculator_repl():
                 if command == 'help':
                     # Display available commands
                     print("\nAvailable commands:")
-                    print("  add, subtract, multiply, divide, power, modulus, root - Perform calculations")
+                    print("  add, subtract, multiply, divide, power, modulus, integer_division, root - Perform calculations")
                     print("  history - Show calculation history")
                     print("  clear - Clear calculation history")
                     print("  undo - Undo the last calculation")
