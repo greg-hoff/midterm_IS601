@@ -10,6 +10,7 @@ from app.operations import (
     Multiplication,
     Division,
     Power,
+    Modulus,
     Root,
     OperationFactory,
 )
@@ -182,6 +183,27 @@ class TestRoot(BaseOperationTest):
     }
 
 
+class TestModulus(BaseOperationTest):
+    """Test Modulus operation."""
+
+    operation_class = Modulus
+    valid_test_cases = {
+        "positive_numbers": {"a": "10", "b": "3", "expected": "1"},
+        "even_divisible": {"a": "6", "b": "2", "expected": "0"},
+        "larger_divisor": {"a": "5", "b": "7", "expected": "5"},
+        "decimal_dividend": {"a": "10.5", "b": "3", "expected": "1.5"},
+        "same_numbers": {"a": "5", "b": "5", "expected": "0"},
+    }
+    invalid_test_cases = {
+        "modulus_by_zero": {
+            "a": "5",
+            "b": "0",
+            "error": ValidationError,
+            "message": "Division by zero is not allowed"
+        },
+    }
+
+
 class TestOperationFactory:
     """Test OperationFactory functionality."""
 
@@ -193,6 +215,7 @@ class TestOperationFactory:
             'multiply': Multiplication,
             'divide': Division,
             'power': Power,
+            'modulus': Modulus,
             'root': Root,
         }
 

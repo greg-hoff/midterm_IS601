@@ -206,6 +206,41 @@ class Power(Operation):
         self.validate_operands(a, b)
         return Decimal(pow(float(a), float(b)))
 
+class Modulus(Operation):
+    """
+    Modulus operation implementation.
+
+    Calculates the modulus (remainder) of one number divided by another.
+    """
+
+    def validate_operands(self, a: Decimal, b: Decimal) -> None:
+        """
+        Validate operands for modulus operation.
+
+        Overrides the base class method to ensure that the divisor is not zero.
+
+        Args:
+            a (Decimal): Dividend.
+            b (Decimal): Divisor.
+        """
+        super().validate_operands(a, b)
+        if b == 0:
+            raise ValidationError("Division by zero is not allowed")
+
+    def execute(self, a: Decimal, b: Decimal) -> Decimal:
+        """
+        Calculate the modulus (remainder) of one number divided by another.
+
+        Args:
+            a (Decimal): Dividend.
+            b (Decimal): Divisor.
+
+        Returns:
+            Decimal: Remainder of the division.
+        """
+        self.validate_operands(a, b)
+        return a % b
+
 
 class Root(Operation):
     """
@@ -265,6 +300,7 @@ class OperationFactory:
         'multiply': Multiplication,
         'divide': Division,
         'power': Power,
+        'modulus': Modulus,
         'root': Root
     }
 
