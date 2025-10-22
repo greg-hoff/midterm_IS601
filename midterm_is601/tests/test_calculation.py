@@ -151,6 +151,21 @@ def test_equality():
     assert calc1 == calc2
     assert calc1 != calc3
 
+# Added equality test with non-Calculation objects - Greg H
+def test_equality_with_non_calculation():
+    """Test equality comparison with non-Calculation objects returns NotImplemented."""
+    calc = Calculation(operation="Addition", operand1=Decimal("2"), operand2=Decimal("3"))
+    
+    # Test comparison with different types - should return False (not equal)
+    assert calc != "not a calculation"
+    assert calc != 5
+    assert calc != None
+    assert calc != {"operation": "Addition"}
+    
+    # Test that the __eq__ method returns NotImplemented for non-Calculation objects
+    result = calc.__eq__("not a calculation")
+    assert result is NotImplemented
+
 
 
 # New Test to Cover Logging Warning
