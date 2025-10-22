@@ -174,3 +174,21 @@ def test_from_dict_result_mismatch(caplog):
 
     # Assert
     assert "Loaded calculation result 10 differs from computed result 5" in caplog.text
+
+# Added tests for string representations - Greg H
+def test_str_representation():
+    """Test the __str__ method returns correct string representation."""
+    calc = Calculation(operation="Addition", operand1=Decimal("2"), operand2=Decimal("3"))
+    expected_str = "Addition(2, 3) = 5"
+    assert str(calc) == expected_str
+
+
+def test_repr_representation():
+    """Test the __repr__ method returns correct detailed representation."""
+    calc = Calculation(operation="Multiplication", operand1=Decimal("4"), operand2=Decimal("5"))
+    repr_str = repr(calc)
+    assert "Calculation(operation='Multiplication'" in repr_str
+    assert "operand1=4" in repr_str
+    assert "operand2=5" in repr_str
+    assert "result=20" in repr_str
+    assert "timestamp=" in repr_str

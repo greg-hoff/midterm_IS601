@@ -103,7 +103,7 @@ class Calculation:
         raise OperationError("Negative exponents are not supported")
 
     @staticmethod
-    def _raise_invalid_root(x: Decimal, y: Decimal):
+    def _raise_invalid_root(x: Decimal, y: Decimal):  # pragma: no cover
         """
         Helper method to raise invalid root error.
 
