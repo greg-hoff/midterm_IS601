@@ -67,7 +67,7 @@ class Calculation:
             "AbsoluteDifference": lambda x, y: abs(x - y),
             "Root": lambda x, y: (
                 Decimal(pow(float(x), 1 / float(y))) 
-                if x >= 0 and y != 0 
+                if x >= 0 and y > 0 
                 else self._raise_invalid_root(x, y)
             )
         }
@@ -103,7 +103,7 @@ class Calculation:
         raise OperationError("Negative exponents are not supported")
 
     @staticmethod
-    def _raise_invalid_root(x: Decimal, y: Decimal):  # pragma: no cover
+    def _raise_invalid_root(x: Decimal, y: Decimal):
         """
         Helper method to raise invalid root error.
 

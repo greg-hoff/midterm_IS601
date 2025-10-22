@@ -50,6 +50,20 @@ def test_invalid_root():
     with pytest.raises(OperationError, match="Cannot calculate root of negative number"):
         Calculation(operation="Root", operand1=Decimal("-16"), operand2=Decimal("2"))
 
+# Added test for zero root - Greg H
+def test_zero_root():
+    """Test that attempting to calculate a root with zero degree raises appropriate error."""
+    with pytest.raises(OperationError, match="Zero root is undefined"):
+        Calculation(operation="Root", operand1=Decimal("16"), operand2=Decimal("0"))
+
+
+def test_calculation_error_handling():
+    """Test that calculation errors are properly wrapped in OperationError."""
+    # Create a calculation that will cause an arithmetic error
+    with pytest.raises(OperationError, match="Calculation failed"):
+        # This should trigger an OverflowError or similar when trying to compute huge power
+        Calculation(operation="Power", operand1=Decimal("10"), operand2=Decimal("10000"))
+
 # Added test for Modulus - Greg H
 def test_modulus():
     calc = Calculation(operation="Modulus", operand1=Decimal("10"), operand2=Decimal("3"))
@@ -136,6 +150,7 @@ def test_equality():
     calc3 = Calculation(operation="Subtraction", operand1=Decimal("5"), operand2=Decimal("3"))
     assert calc1 == calc2
     assert calc1 != calc3
+
 
 
 # New Test to Cover Logging Warning
