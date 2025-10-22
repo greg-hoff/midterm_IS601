@@ -147,6 +147,38 @@ class TestCalculatorExceptions:
                 with pytest.raises(Exception):
                     Calculator(config=config)
     
+    def test_initialization_history_load_failure(self):
+        """Test exception handling during calculator initialization when history loading fails (lines 77-79)."""
+        with TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            config = CalculatorConfig(base_dir=temp_path)
+            
+            with patch.object(CalculatorConfig, 'log_dir', new_callable=PropertyMock) as mock_log_dir, \
+                 patch.object(CalculatorConfig, 'log_file', new_callable=PropertyMock) as mock_log_file, \
+                 patch.object(CalculatorConfig, 'history_dir', new_callable=PropertyMock) as mock_history_dir, \
+                 patch.object(CalculatorConfig, 'history_file', new_callable=PropertyMock) as mock_history_file:
+                
+                mock_log_dir.return_value = temp_path / "logs"
+                mock_log_file.return_value = temp_path / "logs/calculator.log"
+                mock_history_dir.return_value = temp_path / "history"
+                mock_history_file.return_value = temp_path / "history/calculator_history.csv"
+                
+                # Mock load_history to raise an exception during initialization
+                with patch('app.calculator.Calculator.load_history') as mock_load_history:
+                    mock_load_history.side_effect = Exception("History file corrupted")
+                    
+                    # Mock the logging.warning to verify it gets called
+                    with patch('app.calculator.logging.warning') as mock_warning:
+                        # Calculator should still initialize successfully despite history load failure
+                        calculator = Calculator(config=config)
+                        
+                        # Verify the warning was logged with the correct message
+                        mock_warning.assert_called_once_with("Could not load existing history: History file corrupted")
+                        
+                        # Verify calculator was still created successfully
+                        assert isinstance(calculator, Calculator)
+                        assert calculator.history == []  # Should start with empty history
+    
     def test_operation_error_with_chained_exception(self, calculator):
         """Test OperationError with chained exceptions."""
         calculator.set_operation(OperationFactory.create_operation('add'))
@@ -203,6 +235,45 @@ class TestCalculatorExceptions:
         # This should raise ValueError since observer is not in the list
         with pytest.raises(ValueError):
             calculator.remove_observer(observer)
+    
+    def test_history_size_limit_enforcement(self, calculator):
+        """Test that history does not exceed max size (line 219)."""
+        from app.operations import OperationFactory
+        
+        # Set a small max history size to test the limit
+        calculator.config.max_history_size = 3
+        
+        # Set up an operation
+        add_operation = OperationFactory.create_operation('add')
+        calculator.set_operation(add_operation)
+        
+        # Perform operations to fill the history beyond the limit
+        calculator.perform_operation(1, 2)  # History: [calc1]
+        calculator.perform_operation(2, 3)  # History: [calc1, calc2]
+        calculator.perform_operation(3, 4)  # History: [calc1, calc2, calc3]
+        
+        # Verify history is at max size
+        assert len(calculator.history) == 3
+        assert calculator.history[0].operand1 == Decimal('1')  # First calculation
+        assert calculator.history[2].operand1 == Decimal('3')  # Last calculation
+        
+        # Add one more operation - this should trigger line 219 (history.pop(0))
+        calculator.perform_operation(4, 5)  # History: [calc2, calc3, calc4]
+        
+        # Verify history size is still at max and oldest was removed
+        assert len(calculator.history) == 3
+        assert calculator.history[0].operand1 == Decimal('2')  # First calc was removed, second is now first
+        assert calculator.history[1].operand1 == Decimal('3')  # Third calc is now second
+        assert calculator.history[2].operand1 == Decimal('4')  # New calc is now third
+        
+        # Add another operation to confirm continued enforcement
+        calculator.perform_operation(5, 6)  # History: [calc3, calc4, calc5]
+        
+        # Verify history size is still at max and oldest was removed again
+        assert len(calculator.history) == 3
+        assert calculator.history[0].operand1 == Decimal('3')  # Second calc was removed, third is now first
+        assert calculator.history[1].operand1 == Decimal('4')  # Fourth calc is now second  
+        assert calculator.history[2].operand1 == Decimal('5')  # New calc is now third
 
 
 class TestConfigurationExceptions:
