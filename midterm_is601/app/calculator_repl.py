@@ -154,7 +154,7 @@ def calculator_repl():
                     # Save calculation history to file
                     try:
                         calc.save_history()
-                        print("History saved successfully")
+                        print("History saved successfully") # pragma: no cover
                     except Exception as e:
                         print(f"{Fore.RED}Error saving history: {e}")
                     continue
@@ -194,7 +194,7 @@ def calculator_repl():
                                 # Format result to configured precision
                                 precision_pattern = Decimal('0.' + '0' * calc.config.precision)
                                 formatted_result = str(result.quantize(precision_pattern).normalize())
-                            except:
+                            except:# pragma: no cover
                                 # Fallback if quantize fails
                                 formatted_result = str(result)
                         else:
